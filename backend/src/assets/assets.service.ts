@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Asset } from './interfaces/asset.interface';
+import type { Asset } from './interfaces/asset.interface';
 
 @Injectable()
 export class AssetsService {
@@ -16,7 +16,7 @@ export class AssetsService {
       location: 'Hall B',
       name: 'Air Compressor',
       serialNumber: 'AC-001',
-      status: 'UNDER_MAINTANCE',
+      status: 'UNDER_MAINTENANCE',
     },
     {
       id: '3',

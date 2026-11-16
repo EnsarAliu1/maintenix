@@ -1,4 +1,4 @@
-export type AssetStatus = 'OPERATIONAL' | 'UNDER_MAINTANCE' | 'OUT_OF_SERVICE';
+export type AssetStatus = 'OPERATIONAL' | 'UNDER_MAINTENANCE' | 'OUT_OF_SERVICE';
 
 export interface Asset {
   id: string;
