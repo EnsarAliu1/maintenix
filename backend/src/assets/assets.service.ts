@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import type { Asset } from './interfaces/asset.interface';
+import { ConflictException } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import type { CreateAssetDto } from './dto/create-asset.dto';
 
 @Injectable()
 export class AssetsService {
@@ -39,5 +42,28 @@ export class AssetsService {
     }
 
     return asset;
+  }
+
+  create(createAssetDto: CreateAssetDto): Asset {
+    const serialNumber = createAssetDto.serialNumber
+      .trim()
+      .toUpperCase()
+
+    if (this.assets.some((asset) => asset.serialNumber === serialNumber)) {
+      throw new ConflictException("This serial number already exists!")
+    }
+
+    const id = randomUUID()
+
+    const newAsset: Asset = {
+      id,
+      name: createAssetDto.name,
+      serialNumber,
+      location: createAssetDto.location,
+      status: createAssetDto.status as Asset['status'],
+    }
+
+    this.assets.push(newAsset)
+    return newAsset
   }
 }

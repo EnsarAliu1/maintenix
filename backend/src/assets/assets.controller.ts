@@ -1,6 +1,8 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import type { Asset } from './interfaces/asset.interface';
+import { Body, Post } from '@nestjs/common';
+import { CreateAssetDto } from './dto/create-asset.dto';
 
 @Controller('assets')
 export class AssetsController {
@@ -14,5 +16,10 @@ export class AssetsController {
   @Get(':id')
   findOne(@Param('id') id: string): Asset {
     return this.assetsService.findOne(id);
+  }
+
+  @Post()
+  create(@Body() createAssetDto: CreateAssetDto): Asset {
+    return this.assetsService.create(createAssetDto)
   }
 }
