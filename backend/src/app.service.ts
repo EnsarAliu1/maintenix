@@ -3,14 +3,14 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getAppInfo(): {
-    name: string,
-    version: string,
-    status: string
+    name: string;
+    version: string;
+    status: string;
   } {
     return {
-      "name": "Maintenix API",
-      "version": "1.0.0",
-      "status" : "running"
+      name: 'Maintenix API',
+      version: '1.0.0',
+      status: 'running',
     };
   }
 }
