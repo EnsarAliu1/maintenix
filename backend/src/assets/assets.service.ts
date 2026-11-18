@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import type { Asset } from './interfaces/asset.interface';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, BadRequestException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import type { CreateAssetDto } from './dto/create-asset.dto';
+import type { UpdateAssetDto } from './dto/update-asset.dto';
 
 @Injectable()
 export class AssetsService {
@@ -45,25 +46,68 @@ export class AssetsService {
   }
 
   create(createAssetDto: CreateAssetDto): Asset {
-    const serialNumber = createAssetDto.serialNumber
-      .trim()
-      .toUpperCase()
+    const serialNumber = createAssetDto.serialNumber.trim().toUpperCase();
 
     if (this.assets.some((asset) => asset.serialNumber === serialNumber)) {
-      throw new ConflictException("This serial number already exists!")
+      throw new ConflictException('This serial number already exists!');
     }
 
-    const id = randomUUID()
+    const id = randomUUID();
 
     const newAsset: Asset = {
       id,
       name: createAssetDto.name,
       serialNumber,
       location: createAssetDto.location,
-      status: createAssetDto.status as Asset['status'],
+      status: createAssetDto.status,
+    };
+
+    this.assets.push(newAsset);
+    return newAsset;
+  }
+
+  update(id: string, updateAssetDto: UpdateAssetDto): Asset {
+    const asset = this.findOne(id);
+
+    if (
+      updateAssetDto.name === undefined &&
+      updateAssetDto.serialNumber === undefined &&
+      updateAssetDto.location === undefined &&
+      updateAssetDto.status === undefined
+    ) {
+      throw new BadRequestException('At least one field must be provided');
     }
 
-    this.assets.push(newAsset)
-    return newAsset
+    let normalizedSerialNumber: string | undefined;
+
+    if (updateAssetDto.serialNumber !== undefined) {
+      normalizedSerialNumber = updateAssetDto.serialNumber.trim().toUpperCase();
+
+      const serialNumberExists = this.assets.some(
+        (existingAsset) =>
+          existingAsset.serialNumber === normalizedSerialNumber &&
+          existingAsset.id !== id,
+      );
+
+      if (serialNumberExists) {
+        throw new ConflictException('This serial number already exists!');
+      }
+    }
+
+    const updatedAsset: Asset = {
+      ...asset,
+      name: updateAssetDto.name ?? asset.name,
+      serialNumber: normalizedSerialNumber ?? asset.serialNumber,
+      location: updateAssetDto.location ?? asset.location,
+      status: updateAssetDto.status ?? asset.status,
+    };
+
+    const index = this.assets.findIndex(
+      (existingAsset) => existingAsset.id === id,
+    );
+
+    this.assets[index] = updatedAsset;
+
+    return updatedAsset;
   }
 }
