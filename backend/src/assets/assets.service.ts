@@ -46,26 +46,24 @@ export class AssetsService {
   }
 
   create(createAssetDto: CreateAssetDto): Asset {
-    const serialNumber = createAssetDto.serialNumber
-      .trim()
-      .toUpperCase()
+    const serialNumber = createAssetDto.serialNumber.trim().toUpperCase();
 
     if (this.assets.some((asset) => asset.serialNumber === serialNumber)) {
-      throw new ConflictException("This serial number already exists!")
+      throw new ConflictException('This serial number already exists!');
     }
 
-    const id = randomUUID()
+    const id = randomUUID();
 
     const newAsset: Asset = {
       id,
       name: createAssetDto.name,
       serialNumber,
       location: createAssetDto.location,
-      status: createAssetDto.status as Asset['status'],
-    }
+      status: createAssetDto.status,
+    };
 
-    this.assets.push(newAsset)
-    return newAsset
+    this.assets.push(newAsset);
+    return newAsset;
   }
 
   update(id: string, updateAssetDto: UpdateAssetDto): Asset {
@@ -87,7 +85,8 @@ export class AssetsService {
 
       const serialNumberExists = this.assets.some(
         (existingAsset) =>
-          existingAsset.serialNumber === normalizedSerialNumber && existingAsset.id !== id,
+          existingAsset.serialNumber === normalizedSerialNumber &&
+          existingAsset.id !== id,
       );
 
       if (serialNumberExists) {
@@ -101,13 +100,14 @@ export class AssetsService {
       serialNumber: normalizedSerialNumber ?? asset.serialNumber,
       location: updateAssetDto.location ?? asset.location,
       status: updateAssetDto.status ?? asset.status,
-    }
+    };
 
-
-    const index = this.assets.findIndex((existingAsset) => existingAsset.id === id);
+    const index = this.assets.findIndex(
+      (existingAsset) => existingAsset.id === id,
+    );
 
     this.assets[index] = updatedAsset;
 
-    return updatedAsset
+    return updatedAsset;
   }
 }

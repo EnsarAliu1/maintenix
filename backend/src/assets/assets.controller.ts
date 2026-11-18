@@ -21,7 +21,7 @@ export class AssetsController {
 
   @Post()
   create(@Body() createAssetDto: CreateAssetDto): Asset {
-    return this.assetsService.create(createAssetDto)
+    return this.assetsService.create(createAssetDto);
   }
 
   @Patch(':id')
@@ -29,6 +29,6 @@ export class AssetsController {
     @Param('id') id: string,
     @Body() updateAssetDto: UpdateAssetDto,
   ): Asset {
-    return this.assetsService.update(id, updateAssetDto)
+    return this.assetsService.update(id, updateAssetDto);
   }
 }

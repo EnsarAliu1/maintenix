@@ -1,34 +1,27 @@
-import {
-    IsString,
-    IsNotEmpty,
-    Length,
-    IsIn,
-    Matches
-} from 'class-validator'
+import { IsString, IsNotEmpty, Length, IsIn, Matches } from 'class-validator';
 
-import { ASSET_STATUSES } from '../interfaces/asset.interface'
+import { ASSET_STATUSES } from '../interfaces/asset.interface';
+import type { AssetStatus } from '../interfaces/asset.interface';
 
 export class CreateAssetDto {
-    @IsString()
-    @Length(2, 100)
-    @Matches(/\S/)
-    @IsNotEmpty()
-    name: string;
+  @IsString()
+  @Length(2, 100)
+  @Matches(/\S/)
+  @IsNotEmpty()
+  name: string;
 
-    @IsString()
-    @Length(2, 50)
-    @Matches(/\S/)
-    @IsNotEmpty()
-    serialNumber: string;
+  @IsString()
+  @Length(1, 50)
+  @Matches(/\S/)
+  @IsNotEmpty()
+  serialNumber: string;
 
-    @IsString()
-    @Length(2, 100)
-    @Matches(/\S/)
-    @IsNotEmpty()
-    location: string;
+  @IsString()
+  @Length(2, 100)
+  @Matches(/\S/)
+  @IsNotEmpty()
+  location: string;
 
-    @IsIn(ASSET_STATUSES)
-    @Matches(/\S/)
-    @IsNotEmpty()
-    status: string
+  @IsIn(ASSET_STATUSES)
+  status: AssetStatus;
 }
