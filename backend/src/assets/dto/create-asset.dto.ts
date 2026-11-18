@@ -6,7 +6,7 @@ import {
     Matches
 } from 'class-validator'
 
-import { AssetStatus, ASSET_STATUSES } from '../interfaces/asset.interface'
+import { ASSET_STATUSES } from '../interfaces/asset.interface'
 
 export class CreateAssetDto {
     @IsString()
